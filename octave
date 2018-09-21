@@ -1,0 +1,323 @@
+change prompt: PS1('--->');
+
+a=3 %prints to console
+a=3; %semicolon supresses print
+
+has commands like print (disp, sprintf) - kinda like String.
+
+mat
+
+format long: pi shows a lot of digits
+format short: pi shows a couple digits
+
+v=1:0.1:2 start at 1 and increment by .1 until 2
+v=1:6 same but just increment by 1
+
+
+ones(r,c): generate a rXc matrix
+zeros(r, c): same thing
+rand(r, c): same thing
+X = [ones(rows(X), 1) X];: insert a row of ones into X
+
+hist(rand(3, 3)) % histogram dialog
+
+eye(r,c): prints identity matrix
+help eye: just pointing out it has a help feature
+flipud(eye(9)): flips matrix upside down
+
+size(A): returns size of array (as a matrix a 1x2 fyi)
+size(A,1): number of rows
+size(A,2): number of cols
+length(A): returns longer dimension of A
+
+pwd: print working directory
+
+load myfile.txt: load myfile.txt into variable myfile
+load('myfile.txt'): same
+who: shows what variables have been declared
+whos: a more detaild version of who
+clear myVariable: deletes a variable
+clear: deletes all variables
+
+M = rand(4, 4)
+m = M(1:3): start at 1, return 3 element row vector
+
+M = rand(3)
+save myFIle.txt M: saves the file as binary
+save myFIle.txt M -ascii: saves the file as ascii
+
+A = [1 2; 3 4; 5 6]
+A(1, 2): select by row and col
+A(:,2): select the entire second col
+A(2,:): select the entire second row
+A([1 3], :) select 1st & 3rd rows, all cols
+A(:,2) = [10; 11; 12]: assign vals to second col
+A = [A, [100 101 102]]: append new row to A
+A = [A [100; 101; 102]]: append new row to A
+A(:): put all elements of A into a single column vector
+
+
+>> A = [1;3]
+A =
+
+   1
+   3
+
+>> B = [2;4]
+B =
+
+   2
+   4
+
+>> C = [A B]
+C =
+
+   1   2
+   3   4
+
+
+
+A*B
+A.*B: element-wise multiplication
+A.^2: element-wise squaring
+1./A: element-wise division
+abs(A): element-wise absolute value
+A+1 and A.+1: element-wise additition of 1
+A': transpose A
+
+
+max([1 2 3]): returns 3
+[value, index] = max([1 2 3 4 5 9 8 7 6]): returns max and its index
+max(A): will actually return column-wise max
+
+
+A = [1 0; 0 1]
+A < 1
+ans =
+   0   1
+   1   0
+
+
+find(A<3): returns index of the elements
+
+
+A = [1 0; 0 1]
+A =
+   1   0
+   0   1
+>> [r, c] = find(A < 1)
+r =
+   2
+   1
+c =
+   1
+   2
+
+
+magic(3): each row column and diagnol add up to the same thing
+
+
+sum(A)
+sum(A, 1): column sum
+sum(A, 2): row sum
+prod(A)
+floor(A)
+ceil(A)
+pinv(A): inverse of A
+
+max(A, B): element-wise max of two matrices
+help max - column -wise, row-wise, blah blah blah
+max(max(A)): max one dim then the next. largest in matrix.
+
+* to sum or max diagnol multiple by identity array
+
+
+t=[0:.1:2*pi]
+plot(sin(t)): graph it
+
+x = [0:1:10]
+y = cos(x)
+plot(x, y) : draw a sweet low-res graph of cos(s)
+
+plot(foo);
+hold on;: is gonnna draw over current figure
+plot(bar)
+
+plot(foo)
+legend('X AXIS'): add , 'y axis' if you have another graph
+title('my cool graph')
+print -dpng 'myPlot.png'
+print -dpng 'myPlot.png'
+close: closes the plot
+
+figure(1); plot(foo);
+figure(2); plot(bar); :creates a second plot window
+
+subplot(1, 2, 1): divide into 1x2 grid. access 1st one
+plot(foo): plot it
+subplot(1, 2, 2): set focus to the second one
+plot(bar): plot that one
+axis([.5 1 -1 1]): x axis displays from .5-1, y from -1-1
+clf;: clears the figure
+
+imagesc(magic(5)): display matrix as colors
+imagesc(A), colorbar, colormap, gray: more shit you can use
+
+a=1,b=2,c=3 if you want to initialize like an asshole
+
+
+CTRL + L: clear the whole screen
+
+disp(x): print the value to the screen
+
+BASIC FOR LOOP
+>> for i=1:10,% or say 1:n+1
+v(i)=2^i;
+end;
+>> v
+
+FOR LOOP FROM VARIABLE
+>> indices=1:10
+indices =
+    1    2    3    4    5    6    7    8    9   10
+>> for i=indices,
+disp(i);
+end;
+
+WHILE LOOP
+i = 1
+while i <= 5,
+v(i) = 100;
+i = i + 1;
+end;
+
+WHILE LOOP WITH IF AND BREAK 
+i = 1
+while i <= 5,
+  if i == 6,
+    break;
+  end;
+end;
+
+ELSE IF
+elsif v(1) == 2,
+  foooooo;
+else
+  barrrrrrrrrrrrrr;
+break;
+
+FUNCTIONS
+% BEGIN squareThisNumber.m %
+function y = squareThisNumber(x): fyi, y is the value returned
+y = x^2
+% END squareThisNumber.m %
+squareThisNumber(5);: is how you call it
+
+function [y,y2] = squareAndCubeThisNumber(x): [y, y2] are returned
+y=x^2
+y2=x^3
+[a, b] = squareAndCubeThisNumber(2);: is how you call it
+
+addpath('myPath'): adds that path to octaves search path
+
+-----------------------------------------------------------------------
+* fminunc is an optimization solver that find the minimum of an unconstrained function.
+
+- we pass it a function to calculate the error and the gradient. we set use gradient to on in options in ex2.m. 
+
+- for the error, think the location on a 3d graph. for the gradient think the partial derivatives of θ that tell you how to gradient descent. e.g. its just the for loop that we did manually in logistic regression gradient descent except the loop and the descent part are done for us. we just have to tell it how to calculate the cost and what the partial derivatives are at that cost.
+
+-----------------------------------------------------------------------
+
+#########################################################################################
+
+http://stackoverflow.com/questions/12032494/plot-window-not-responding
+
+The problem is just as likely to be the graphics toolkit your installation of Octave is using.
+
+To test whether this is the case, in the Octave command line type in: graphics_toolkit
+
+Yours will probably be fltk.
+
+If this is the case, and if your plot window is freezing, then switch the default toolkit to gnuplot:
+
+graphics_toolkit('gnuplot')
+
+Then test it out: x=1:10; y=x.^2; plot(x,y)
+
+If this works, you may want to make the change permanent, in which case you'll need to change it in your octave.rc file, located in your Octave installation directory:
+
+\Octave\share\octave\site\m\startup\octaverc
+
+#########################################################################################
+
+online gif maker - seems to work good - http://gifmaker.me/
+
+
+x=[1;2;3;4;5;6]
+x(2:end)
+ans =
+
+   2
+   3
+   4
+   5
+   6
+
+
+
+
+
+
+x =
+
+   3
+   2
+   1
+
+>> x(2:end) = [9;9]
+x =
+
+   3
+   9
+   9
+
+
+
+#########################################################################################
+
+UNROLL MATRICES INTO SINGLE VECTOR... and put them back
+
+>> x = [[1 2; 3 4](:) ; [5 6; 7 8](:)]
+x =
+
+   1
+   3
+   2
+   4
+   5
+   7
+   6
+   8
+
+>> reshape(x(1:4), 2, 2)
+ans =
+
+   1   2
+   3   4
+
+>> reshape(x(5:8), 2, 2)
+ans =
+
+   5   6
+   7   8
+
+
+
+####################################################################
+
+HOW TO INSTALL PACKAGES
+
+https://octave.sourceforge.io/
+pkg install -forge package_name 
+

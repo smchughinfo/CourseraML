@@ -1,0 +1,1248 @@
+θ 
+λ
+∑ - upper
+σ - lower
+Π - upper
+π - lower
+Δ - upper
+δ - lower
+μ Mu (pronounced mew)
+ε - lower (epsilon, upper just looks like E)
+α - alpha, lowercase
+≤ 
+≥
+○
+✖
+≈ 
+ℝ
+∈
+
+superscripts
+¹
+²
+³
+⁴
+ⁱ
+ʲ
+ⁿ
+ 
+subscripts
+₀
+₁
+₂
+₃
+₄
+₅
+ⱼ
+ₙ
+
+- looking at the gtaphs and then manually trying to lead off the numbers is not a good way to decrease the cost function
+
+- linear regression has no local optima
+
+
+FEATURE SCALING
+    |3| <
+    or
+    |1/3| >
+    consider feature scaling
+value/(max-min) --- results in a new range of just 1
+
+MEAN NORMALIZATION
+(size-average)/(max-min) --- results in a new average input value of 0
+*you can also use the standard deviation instead of max
+
+This stuff will get you not exactly but ROUGHLY into a normalized range
+
+If gradient descent is working the value of J(theta) should decrease at EVERY iteration
+
+
+Knowing when gradient descent has converged: See if it decrease by less than 10^(-3) in one iteration. But 10^(-3) isn't always the right number and finding that number is often difficult. Ng likes to look at plots to see if he's satisfied that it's converged.
+
+If error goes up or goes up and down try a smaller learning rate. Slow convergence could even be caused by too high a learning rate. Just plot a bunch and use which works. Try 1, .1, .01, etc. He actually uses .001, .003, .01, .03, .1, .3, 1, 3, etc.
+
+
+
+POLYNOMIAL REGRESSION FITTING
+you may want a ^2 or a ^3 to fit the data.
+if you want a cube what you can do is something like this:
+
+θ1(size) + θ2(size)^2 + θ3(size)^3
+
+e.g. just using the same feature but getting it to fit a more curvey graph.
+*if you choose your feature like this feature scaling becomes very important. think 10, 10^2, 10^3... and the difference becomes really large
+*if your hypothesis starts curving back down try sqrt(x) instead of x^2 and it may level out.
+
+NORMAL EQUATION
+kinda like this theta = pinv(X'X)XY
+- one shot one kill
+- slow if you have a lot (like 10,000 or more) features
+  - the cost comes from inverting a big matrix being expensive
+actually kind of cool --- https://www.coursera.org/learn/machine-learning/supplement/bjjZW/normal-equation
+
+GRADIENT DESCENT
+- have to choose learning rate
+- need many iterations
+- runs okay with a lot of features
+
+< 10000 features use normal equation.
+> 10000 features use linear regression
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+WEEK 3 - CLASSIFICATION
+*logistic regression is actually a classification algorithm. it's called regression for historical reasons.
+
+sigmoid function (also called logistic function) - range is [0, 1]
+
+      | --------
+      |/
+      /
+_____/|
+------|----------    
+      |
+      |
+
+output between 0-1
+if .7, we can say 70% chance it is true
+
+p(y=1|x;θ) "probability that x=1 given x, parameterized by θ"
+      
+WHOA WHOA WHOA.
+range of sigmoid is [0,1]. say it comes out to .7. so there's a 30% chance it's false. but you can't add up to 1 within that range. right??? 
+
+"Parameterized by theta"
+means you have a static X. but when * by theta, which is a parameter, you can make it dynamic. parameterized by theta.
+
+
+
+btw in math 0
+y=E {0,1}
+{} is an array. 
+
+(0,1)U[6,infinity) --> interval notation
+
+
+
+
+
+
+      -ln(hypothesis(x)      if y = 1
+COST =
+      -ln(1- hypothesis(x))  if y = 0
+
+A NUANCE
+*if h(x) = y then cost = 0
+*if h(x) = .5 then cost > 0
+
+COME BACK TO THIS. LOOK AT THE GRAPH --- SOMETHING ABOTU EVEN IF CLOSE IT'S STILL AN ASYMPTOTE. NOT SURE HOW COST = 0 THOUGH
+
+
+
+
+LOGISTIC REGRESSION 1 VS ALL
+if you have triangles, circles, and squares make a classifier for each and then whichever is the most confident is the winner.
+
+
+OVERFITTING
+
+underfitting - also called high bias
+
+
+REGULARIZATION
+- t1x, t2x, t3x, t4x --- some of these are causing overfitting. we want them but we want their contribution to be small. So we make sure those values for theta are very small so as to drag that terms contribution down.
+
+J(θ) = 1/2m ∑[-yⁱln(hθ(x)) - (1-yⁱ)ln(1-hθ(x))]
+J(θ₀⁰) = 1/2m ∑[hθ(x)-y] + λ∑θ²j
+
+left term want to fit as close as possible
+right terms wants to minimize each terms impact (by keeping parameters small). "it determines how much the costs of our theta parameters are inflated".
+ITS A WAR!
+
+*but, there is a way to automatically choose the regularization parameter as well.
+
+
+linear regression regularization and logistic regression regularization both use the same equation, J(θ₀⁰) = 1/2m ∑[hθ(x)-y] + λ∑θ²j. but they look different because logistic regression uses sigmoid to normalize the hypothesis.
+
+NEURAL NETWORKS
+
+-don't forget (θ^T)X is second nature. It means for a given record, multiply and sum all θ's and x's. e.g. do the polynomial for that theta and x's.
+
+
+x₀    a₀²    <-- bias units
+
+x₁    a₁²
+    
+x₂    a₂²    ○ -->    hθ(x)     
+
+x₃    a₃²
+
+col1 = layer 1 = input layer
+col2 = layer 2 = hidden layer
+col3 = layer 3 = ouput layer
+
+θ is a matrix of weights now!!!
+
+#########################################################
+https://www.coursera.org/learn/machine-learning/supplement/Bln5m/model-representation-i
+
+"Each layer gets its own matrix of weights, θ(j)" - from 
+
+Example: layer 1 has 2 input nodes and layer 2 has 4 activation nodes. Dimension of Θ(1) is going to be 4×3 where sj=2 and sj+1=4, so sj+1×(sj+1)=4×3.
+##########################################################
+
+If a layer has Sⱼ number of units. e.g. above there are 3 in the input and hidden...
+The dimensions of theta for layer j be: (Sⱼ₊₁)X(Sⱼ+1)
+
+(how many does the next guy have) X (how many do I Have + 1)
+
+
+
+sigmoid is the "activation function"
+
+
+################################################################
+
+BACKPROPAGATION
+
+- allows you to compute "errors" for each paramater in the nn. but i think "errors" just means the slope of each param at the current point in an n-dimensional graph.
+
+- there is a vectorized implementation for computing Δ!!!!!!!!!!!!!
+--- look at end of video 2. the section in red. 
+
+l,i,j insanity
+l = curLayer
+i = curRowInTraining set
+j - which node in the cur layer
+
+Numerical Esitmation of gradients
+- always uses this because you might have a bug in backprop even though the error still gets smaller
+- sort of like calculating lim(f(x)-f(x+))/h except calc (f(x+w)-f(x-w))/2w usually uses w=10^4. If you go too small you get numeric errors (probably doing arithmetic on tiny numbers not working).
+-just does that for every theta. rolls out theta into a vector. then does a for loop with (θ+ε-(θ-ε))/2ε for every elemement in theta.
+-once you know your gradient checking code is working turn it off so it doesnt slow down your code in production.
+- the other way, e.g. regular backprop (which atm i dont fully understand), is much more effecient than this. this, e.g. gradient checking, is just for scaffolding/debugging. I suppose technically you could use it in prod but I don't think it's technically/mathematically as perfect AND is slower... I think that is the take-away.
+
+Random Initialization (Symmetry breaking)
+- You can't initialize theta1 to all zeros. If you do each weight coming out of a node (say x1) will get updated to the same value. e.g. ALl nodes it points to will be get the same input from it. BUt if you initialize to random values they are free to change. ...unless, by some coincidence the two weights ever become the same value. In which case wouldn't they got locked together too?
+-"all of your hidden units are computing the exact same feature"
+
+-rand(1) gives random value between 0 and 1 inclusive
+-rand(1)*5 gives a random value between 0 and 5 inclusive
+-rand(3, 1)*5 gives a random vector between 0 and 5 inclusive
+
+
+
+
+MORE BACKPROP
+ng does compute deltas for bias nodes when doing backprop. but it sounds like that's just because it makes the computation easier. he said he usually just throws them away. ...remember the bias nodes output 0 and there's no way to change that.
+
+IF HYPOTHESIS DOESNT PERFORM WELL
+- more training data
+- more features
+-less features
+- polynomial features (yx^3, y^2x^2, y^3x) kind of thing
+- change lambda
+
+
+SPLIT TEST DATA
+standard way is typically 70% to train 30% to validate. ...random, obviously
+
+MODEL SELECTION
+what order model to use. e.g. just order1 or how much to increase the order by doing this sort of thing (yx^3, y^2x^2, y^3x)
+
+but that may not work because it is likely to be overly optimistic because it's fit to the test set. e.g. you can't trust the degree (model) that comes out of the test data.
+
+solution:
+60% training set
+20% cross validation
+20% test
+
+train each model on train. evaluate each model on cross validation. pick the model that gives that lowest cross valiation error!
+
+bias vs variance - interesting - if d (the order) is too large for the number of examples that we have. implies you can use a larger d if you have more training examples
+
+note - if a learning algorithm is suffering from high variance getting more training data is likely to help. --- i guess because even though its jagged if you have enough examples it'll smooth out. ...idk
+
+note - nn size - big networks are prone to overfitting but are more computationally expensive although in practice that's probably not a problem. small networks are prone to underfitting. its often a good idea to go with the bigger network and rely/work-on regularization.
+    - again - using a single hidden layer is often a reasonable default
+    - but - try a bunch of networks (different number of layers and nodes) and see which one works best on cross validation training set.
+
+
+WEEK 6 Videos - 2nd pass
+model selection is choosing the order. model selection is also about choosing lambda.
+
+models are likely to perform better on training set than on real data. this is also why you need to evaluate a model using the cross validation set.
+
+to select model try different order polynomals. run them on test data and then see which one works best on the cross validation set. 
+
+linear model
+quadratic model
+cubed model???
+...
+10th order polynomial
+
+using the same data for the training set and validation set is not considered good practice but you will see some people do it. maybe sometimes okay if you have massive amounts of data
+
+the graph in video 4 is an overall view of the graphs in videos 5 and 6. the graph in video 4 shows training data vs cv for each order of model. the graphs in videos 5 and 6 show training vs cv for just one model. sure would be cool if the trainer program output these graphs!!!
+
+video 5 about choosing lambda. you dont use the lambda part of the cost function when measuring how well lambda did. ...duh? he's just saying use the squared error cost function to get the cost.
+
+video 5 about choosing lamda. try them in ...multiples of 2 (... 10.24, you know, multiples of 2?). try a range of values. pick the one that has the lowest squared error on the cross validation set.
+
+*when you think about the size of lambda
+    - think about regularization being used to smooth the hypothesis
+    - no regularization means overfitting. so SUPER regularization means the hypothesis gets stretched out into pretty much just a line
+
+LEARNING CURVES
+to plot learning curves plot JTrain and JCV
+use only 10 or 20 or 30 or 40 examples in your plot
+you still train on all of them. you just only plot the learning curve on your little subset. so your JTrain plot might only have 10 examples even though m>>10.
+
+when you have very few training examples (1, 2, 3, ...< order i guess) its very easy to fit exactly. so JTrain will be low, maybe even 0. but as the number of training examples grows the error from JTrain will actually get bigger just because you can't fit the graph perfectly anymore. ---------- this is all intuition. just writing it down because.
+
+HIGH VARIANCE
+"as the training set size increase it becomes harder to fit the data exactly". which is why more examples can help solve high variance.
+
+"When plotting learning curves they might not be as nice and smooth and pretty as in the video"
+
+on the menu of options to try to fix a hypothesis that isn't performing well. changing lambdas is pretty easy so you might want to try that first.
+
+small nns are prone to underfitting
+large nns are prone to overfitting
+*for large nns use lambda to address overfitting
+
+often in terms of nns its the larger the better
+
+number of hidden layers. usually the more the better. but you might want to try it with a range of hidden layers and see which one does best.
+
+
+
+-------------------------------------------------
+MACHINE LEARNING SYSTEM DESIGN wk6 - 8
+
+SPAM CLASSIFIER
+
+CHOOSING X
+option1 - list of 100 keywords. "deal", "buy", "viagra", "sean"
+        - some of those are indicative of spam, others, like "sean" are indicative of a real email.
+
+
+spam email = "get your viagra today!"
+
+  0 discount
+  0 cash
+x=0 medicine
+  1 viagra
+  0 "your actual address" (wouldnt be in this pretend email cause its spam)
+
+1's and 0's dont put 3 if the word is in there three times.
+
+! how its actually done is to get a training set (10,000-50,000 emails) and pick the 100 most frequently occuring words.
+
+other notes features 
+  - look at email routing (spammers will try to hide where the email came from)
+  - consider should "discount" and "discounts" be treated as the same word? "deal" and "dealer"? should punctuation be considered a feature???
+  - consider detectig misspellings. so they dont fool your spam catcher. e.g. w4tches != watches
+
+DO NOT RANDOMLY FIXATE ON ONE THING! There are lots of ideas here and some people will easily spend 6 months working on one of these problems without a good reason.
+
+----------------------------------------------------
+RECOMMENDED APPROACH
+S.) Simple algorithm you can implement quickly - literally impossible to spend too little time on this
+L.) Learning Curves
+A.) Analyze errors. Manually look at what is being misclassified in your cross validation set. *note - again, your cross validation set. not your test set.
+
+From here you can get a better idea of feasibility and what algorithm to actually use.
+
+ANAYLZE ERRORS (spam example)
+looking at misclassified emails. 
+1. manually look at them and categorize them. e.g. (pharmacy, replica, steal password scams")
+
+you might find that many "steal password scam" emails are being miscategorized. so...
+
+2. you might want to see if you can come up with better features to help categorize them correctly. for example, maybe you see that unusual punctuation is common in the misclassified emails. so now you know to focus on that.
+
+SIMPLE ALGORITHM - using a quick and dirty helps you identify which training examples are the challenging ones
+
+---------------------------------------
+
+STEMMING
+
+Universe/University = univers
+Discount/Discounting/Discounted/Discounts = discoun
+
+run it with and without stemming. see if cross validation error is higher or lower
+
+* you can also try to distinguish between upper and lowercase
+
+---------------------------------------
+
+SKEWED CLASSES
+
+
+say you have a 1% chance of something
+your function is y=0. so it has an error of .5%.
+if we make a change to our algorithm and it goes from 99.2% accuracy to 99.5% accuracy did our change actually help or are we just predicting y=0 more often and getting lucky.
+
+
+                ACTUAL
+               1      0
+PREDICTED 1  true+  false+
+          0  false- true-
+
+
+precision=of all patients where we predicted y, what fraction actually has cancer
+recall=of all patients that actually have cancer, what fraction did we correctly detect as having cancer
+
+DEF2 (by me)
+precision= when we did predict 1, how often were we right
+recall=when the value was 1, how often did we predict it
+accuracy = how many you got right (1 or 0) out of all the examples
+
+so if youre learning algorithm is predicting 
+y=0
+then it will have a recall of
+recall=0
+because there wont be any true positives. ..because y=0
+
+*usually you use the convention that y=1 (not y=0) for the "rare" class that you want to detect. ...rare being like, the ones that you wanted to detect.
+
+----------------------------------------------------
+
+TRADING RECALL AND PRECISION
+*suppose we want to predict y=1 only if we're very confident. (e.g. we dont want to tell someone they have cancer if they really dont)
+ - then predict 1 only if h(x) >= .7 (as opposed to .5)
+ - of course, now you will have lower recall (e.g. not predict as many people who DO have cancer)
+ 
+* suppose we want to avoid missing too many patients with cancer
+ - then set h(x) lower, say .3
+ - of course, now you will have lower precision (but higher recall)
+
+* you can plot a precision/recall curve if you want. see video 11. 6:50
+
+btw, for example, your y=0 predictor has perfect recall.
+----------------------------------------------------
+
+IF YOU HAVE TO THINK ABOUT WHICH VERSION OF YOUR ALGORITHM IS BETTER THAT SLOWS THINGS DOWN.
+
+precision and recall. p=.5, r=.4. p=.7, r=.1, etc, which is better???? 
+
+How do we evluate the algorithm based on ONE number?
+
+you cant use avg because, for example, our perfect recall y=0 algorithm will get a higher score even though all it does it say y=0.
+
+F score: 2PR/(P+R)
+
+*there are other options but people just tend to use this. F doesn't have any meaning. thats just what it is.
+
+if P or R = 0 you get a score of 0
+a perfect score is P=1,R=1 == 1
+so your range is 0-1
+
+so a pretty reasonable way to automatically trade precission and recall would be to try a lot of values for h(x) operator ? and see which gives you the highest f score.
+e.g.
+h(x) >= .5
+h(x) <= .3
+h(x) > .9
+
+------------------------------------------------------
+
+*perceptron  = logistic regression?
+
+------------------------------------------------------
+
+study done by michelle banko and eric brill
+found that with perceptron, winnow, memory-based, naive bayes algorithms once you got enough data (millions) they all pretty much did as good as each other. so there is a saying
+
+"it's not who has the best algorithm that wins. it's who has the most data"
+
+------------------------------------------------------
+
+large data rationale
+
+- can a human do it? 
+
+e.g. i ate (two|too|to) eggs for breakfast. yep, a human can figure that out. how much will a 2400 sqft house cost? nope, not even an expert can tell you based on that information alone.
+
+
+- assuming you have enough features to accurately predict y
+    - that will address bias
+    - JTrain will be small
+
+but what about variance? well, if you have a ton of data, variance irons itself out.
+
+so if you have a good set of features (low bias) you can feed it a lot of data, which will reduce variance, which will make it better and better.
+
+--------------------------------------------------------
+
+*another reminder
+your choice of algorithm is not as important as knowing the right features to use and having enough data.
+
+--------------------------------------------------------
+SUPPORT VECTOR MACHINE
+
+tl;dr two vectors. map V onto U = P. U'V=P*||U||
+
+one vector is our decision bounday + 90 degrees. the other is our ith training example.
+
+then we alter V (aka theta) so that p*||U|| > 1 or p*||U|| < -1 when y-1. 
+--------------------------------------------------------
+KERNELS
+kernels and svms are a good fit. you could use kernels to find features for logistic regression but they are better suited for svm's because they are more computatinallly effecient with svms. 
+
+e.g. using them to find paramaters instead of just increasing the order of your model doesn't sound like something that is really done.
+
+ON THAT NOTE - do not write software to minimize an svm. there are off the shelf solutions that do it and they take advantage of magic. ...numerical optimization tricks.
+
+ALSO - do not write software to minimize and SVM. two suggestions are liblinear and libsvm.
+
+*gaussian and linear kernels are the two most popular kernels, by far.
+google "mercer's theorem". [when svms were first being created there was a move to keep the general. not all kernels you write will be valid. which is why you should just stick with linear or gaussian unless you know what youre doing]
+* some software packages include a gaussian and linear kernel and others you have to write it yourself (e.g. you pass in a function pointer)
+
+
+
+
+
+* you do have to perform feature scaling before using an svm.
+e.g. feature1 is 1000sqft and feature2 is 2 bedrooms.
+
+
+
+other kernels (dont use these)
+-polynomial kernel: (x'l)2,(x'l)^3,(x'l+1)^3,(x'l+constant)^degree
+-string kernel (used for strings)
+-histogram intersection kernel
+-chi-square kernel
+
+~1 to (10,000 or 50,000) examples with a large number of features (maybe up to 50,0000) is where svm's really shine.
+
+- neural networks work well too but might be slower to trian compared to an svm.
+
+*INTERESTING NOTE - the svm optimization problem is convex. e.g. its a lot easier to minimize
+
+SVM's are good tools.
+with SVM's, neural networks, and logistic regression you're very well positioned to write good machine learning software (in 2010???)
+
+AGAIN - the choice in algorithm is important but often not as important as how skilled you are:
+ - identifying features
+ - coming up with new features
+ - solving errors in your algorithms
+ - learning curves? model selection? high bias vs variance. what is the math actually doing? get more data or work on model? e.g. wk6.
+
+SVM BIAS AND VARIANCE - think of gaussian kernel. large sigma means wider kernel means higher bias and lower variance bariance. small sigma means more narrow kernel means lower bias and higher variance.
+
+*note about "high variance". high variance means it varies more abruptly. it sounds like it might mean it varies more between the examples but in your head you might be imagining it nearly perfectly fitting a bunch of points and think that's not variance, it hits the mark every time. but what it means is it varies (e.g. jagged craziness) more between each example.
+
+-------------------------------------------------------------
+
+SPAMASSASIN PUBLIC CORPUS (ex6, in the pdf)
+https://www.google.com/search?sclient=psy-ab&client=ubuntu&hs=3vU&channel=fs&btnG=Search&q=spamasasin+public+corpus
+
+-------------------------------------------------------------
+
+NOTES ON EX6 SPAM CLASSIFIER
+
+STEP-1:
+ex6_spam.m had something setup to handle email headers
+
+STEP0:
+preprocess the emails. tolowercase. normalize (money, m0ney, etc), strip html tags, replace urls with the word httpurl, replace email address with emailaddr
+STEP0.5:
+gonna have to look in the code for an exact answer on this one. take the most frequently used words in our taining set. thats all they way. not how often they are used or their standard deviation or anything. just "the most used". the idea is that if you include every word in your training set you will overfit.
+STEP1:
+select the most frequently used words in spamassasin. they used only words that occured more than 100 times in spam assasin (which led to a list of 1899 word. how they picked the number 100 i have no idea.
+STEP2:
+create a new vector where each member is the index of a word/member in spamassasin that was found in your training data.
+STEP3 (GENERATE THE FEATURES):
+you have your vector from step2. now, for each email, say if that email contained a word in your step2 vector. ...it will be the same size as your step2 vector, obviously.
+will look like
+0
+0
+0
+0
+0
+0
+0
+0
+0
+1
+0
+0
+0
+0
+1
+0
+0
+STEP4:
+now you have features for each email and you know if each email is spam or not. so now you can train your model.
+
+-------------------------------------------------------------
+
+UNSUPERVISED LEARNING
+
+K MEANS (clustering) - VERY COOL
+
+1 randomly initialize cluster centroid
+2 group #examples/cluster centroids based on how close they are to each cluster centroid
+3 move cluster centroid to average point of all theexamples associated with it
+3.5 if cluster centroid has no points (either delete it or randomly reinitialize it)
+4 repeat
+
+-mathematical definition makes it look way more confusing than it actually is. when you minimize youre just minimizing the distance between the x's and the cluster centroids.
+
+* small note - c^i is the index of the cluster to which x^i is assigned
+- J(c¹, c², c³, ..., ck, μ₁, μ₂, μ₃, ..., μk)
+- All minimization does is minimize with respect to c and then minimize with respect to μ and then it keeps on iterating.
+
+
+HOW TO INITIALIZE THE K-MEANS CLASSIFIER CLUSTER CENTROIDS
+
+-pick K random training examples. but dont pick the same example twice. if you did two centroids would be in the same spot and either your program would blow up or you'd effectively have K really= K-1
+- set μk=theRandomXWeAreUsingAsKk
+- train (you might get lucky and you might not
+- do this a bunch of times (normal # of times would be ~50-1000). pick the one that gave you the lowest error (?error.... value for J). whatever that one where had the lowest error was, use the cluster centroids from that one (their final location, not where they started... obviously(?))
+
+*using this approach of random initialization iteratively and then using the one with the lowest error is more likely to be helpful if you only have a few K. if you have a lot of K it wont help as much.
+*2 or 3 or 4 clusters is the "regime" where random initialization is likely to help you find better clusters.
+* stupid note from me - but isn't K=m the ultimate sweet spot? yes. for that training set, you moron. it will be overfit for everything else. 
+
+HOW DO YOU CHOOSE THE NUMBERS OF CLUSTERS?
+
+by hand (look at output of k-means, look at visualization, or whatever else you have to go on)
+*there isnt a good way to do it automatically.
+
+- there isnt always a right answer! sometimes you could say well there are 4 clusters here while looking at the same dataset you could say well there are 2 clusters here.
+
+ELBOW METHOD (for choosing number of clusters)
+
+  \
+ J \
+    \____ 
+  1234567
+
+"after 3 clusters we start seeing very little reduction in J. so use 3."
+
+- in reality it doesn't work like this. the curve is much more gradual.
+***sometimes it works. its worth a shot but dont have a high expectation of it working.
+
+OPTION2
+
+think about it
+- for example. im selling t-shirts and want to find market segments. well, what sizes of t-shirts might i be able to produce? S,M,L. Maybe also XS,S,M,L,XL. But probably not just S and L or one where K=10.
+
+-----------------------------------------------------
+K-MEANS FOR IMAGE COMPRESSION!? (part of programming assignment)
+-----------------------------------------------------
+------------------------------------------
+----------------------------------
+---------------------------
+
+very cool but did not answer my question about distances between colors. it just used my code, lol. the code in findClosestCentroids.m which just takes the linear distance in 3-dimensional space, which sweeps out a sphere on which any point on the surface, regardless of its color to the eye, is the same distance. 
+
+very cool and useful. doesnt answer any questions about how to tell if two colors are similiar.
+------------------------------------------------------------
+
+DIMENSIONALITY REDUCTION
+
+- sometimes you get redundant features. e.g. the same thing twice. e.g. the length of something in inches and the length of something in cm as two seperate features. or you might get very similiar (or highly correlated) features (for example, pilot skill and pilot enjoyment could potentially be reduced to just one feature).
+
+- advantages (of say going from 2 features down to 1 or i suppose if you consider the whole thing at once going from like 20 down to 5)are less memory required and more importantly your algorithm will run faster. 
+
+- first part of video6 kind of explains it. last part of video6 visualizes it pretty good.
+
+---------------------------------------------------------------
+
+DIMENSIONALITY REDUCTION - DATA VISUALIZATION
+
+- when you use the dimensionality reduction algorithm (PCA?) it doesn't prescribe a value to the output. So it outputs z1 and z2, its up to you to figure out what those mean.
+
+
+----------------------------------------------------------------
+
+PRINCIPAL COMPONENTS ANALYSIS
+
+- by far the most popular dimensionality reduction algorithm
+- before applying pca use mean normalization and feature scaling (maybe feature scaling, if you need it).
+
+STEP 1 (preprocessing)
+- normalize
+- feature scaling if needed
+- take the average y (the y feature). for each y,y:=y-avgY. now you have exactly zero mean.
+
+the mean normalization part:
+2,3,4,7 => 2+3+4+7=16. 16/4=4. 2-4=-2,3-4=-1,4-4=0,7-4=3.(-2)+(-1)+0+3=0,0/4=0. Now you have exactly zero mean.
+
+the feature scaling part (scale features to have comparable range of values). do this on all your features:
+(x-xMean)/(maxX-minX)
+or what is more common:
+(x-xMean)/(standardDeviation)
+
+STEP 2 - its actually pretty easy (proof is hard though)
+
+these x's are vectors. the multiplication below is of (nx1)(1xn)
+
+          m
+∑ = (1/m) ∑ (xⁱ)(xⁱ)'
+^        i=1
+|
+|
+Sigma, the variable Sigma, not the summation sumbol. in this case Sigma is the "covariance matrix". ..Sigma is a matrix. 
+*vectorized implementation is (1/m)x'x ---- you can check it if you want. idk how that works.
+
+[U,S,V]=svd(Sigma)
+*"eigenvectors" - pronounced eye-gin-vectors (gyin, not gin the alcoholic drink).
+*Singular Value Decomposition (there are many libraries that can compute this)
+*octave also has an eig function that does the same thing as svd but svd is "a little more numerically stable". if you want to learn more, this has something to do with linear algebra.
+
+svd output:
+U=the only one we need. nxn
+you want to reduce to 72 dimensions? then take the first 72 columns of U.
+
+
+Ureduce is the first k columns of U. e.g. 72.
+Ureduce is nxk, obviously. (that's n by k)
+
+z=Ureduce'*x
+*(kxn)(nx1)= z is a kx1 = z is a k dimensional vector
+
+----------------------------------------------------------------
+
+PCA RECONSTRUCTION
+xApprox=Ureduce*z
+
+isn't exact but kind of close. for example 2d to 1d is like taking our 1d line and giving the slope and y-intercept of the original projection. but all the points lie on the projection.
+----------------------------------------------------------------
+
+PCA CHOOSING K (K is the number of principal components. aka the number of features)
+
+avg squared projection error: on avg how far off was xApprox
+total variation in the data: avg value of x^2. he says ||x|| but not sure how he's getting a length.
+
+2
+3
+4
+
+is the vector. okay, i guess that has a length.
+
+How do you choose K?
+
+good rule of thumb is to choose the smallest K while
+distance between x and its projections
+/
+how much the data varies
+is <= .01. e.g. < 1%. 
+or so that "99% of variance is retained"
+
+*dont tell people you went from 1000 dimension down to 20. say n% of the variance is retained.
+
+*you can also use .05, or .1 or even .15 if you are crazy
+
+HOW DO YOU DO IT?
+while(v<.01) k++ ???????? nope, too slow
+SEE PICTURES "PCA5 CHOOSING K"
+
+* you can often get away with reducing a lot of dimensions. the features are often highly correlated. so you can often get away with a lot of compression while still retaining high variance.
+
+------------------------------------------------------
+
+PRETTY OBVIOUS
+
+- when you run PCA do it on the training set and then apply it to the cross validation set. dont use the cross validation set to help figure out pca.
+
+APPLICATIONS OF PCA
+- reduce size and speed up learning algorithm
+- visualization. we can only see in 2d and 3d. reduce dims to visualize higher dimensional data.
+
+BAD USE OF PCA
+- to prevent overfitting. Why? Well, it might actually work okay. But you should use regularization instead. ..it might actually be okay if you are retaining 99% of variance or something. ...but PCA throws away the values of y. Use regularization!
+
+A GOOD QUESTION
+What if we just do the whole thing without using PCA?
+- try your original data first. then try pca. don't architect a plan that uses pca before you have actually tested your algorithm.
+
+-------------------------------------------------------------
+ANOMALY DETECTION
+
+1. choose features that you think might could be indicators for anomalies. (say for credit card fraud - the country they log in from, their browsers user agent string, etc).
+2. fit mu and sigma (there are also pictures of these in pictures/anomaly detection)
+for j=1:n
+           m
+  μⱼ =(1/m) ∑ xⁱⱼ
+          i=1
+  ---> the center of the distribution curve. e.g. the mean. 
+  ---> this can be vectorized for j=1:n all at once
+    ---> umm, not sure how though. its just summing the row of 
+         x₁,x₂,...xₙ. I guess sum(A,2) would be "vectorized"?
+
+
+           m
+  σ²ⱼ=(1/m) ∑(xⁱⱼ - μⱼ)²
+          i=1
+  ---> the width (and the height, actually) of the distribution curve.
+  ---> this can be vectorized too. 
+
+end
+
+* reminder, the area under the distribution curve is always 1.
+
+3. p(x)=Π(1/(sqrt(2*pi)sigma))*e^(-(x-μ)/(2σ²))
+gives you the probability. its just f(x) where x is your distribution 
+curve. if p(x)=small then it has a low probability and can be flagged
+as anamolous.
+  ---> see pictures/anomaly detection/gaussiondistribution.jpg for a prettier version
+
+
+
+-------------------------------------------------------------
+DENSITY ESTIMATION
+
+(probability of x1)*(probability of x2)*...(probability of xn)
+
+p(x;mu1,sigma^2_1)*p(x;mu2,sigma^2_2)*...p(x;mun,sigma^2_n)
+
+each mu and sigma^2 are different
+ n
+ Π  p(xⱼ;μⱼ,σ²ⱼ)
+j=1
+
+------------------------------------------------------------
+EVALUATING THE PERFORMANCE OF AN ANOMALY DETECTION ALGORITHM
+
+- its nice to have a number you can just look at
+- the standard way is to get some labeled data (y=0, y=1)
+
+1. training set. get some normal (e.g. non-anomalous) data. it's okay if there are a few anomalies in your training set, though.
+2. define a test set and cross-validation set. these should have a few anomalous data.
+
+EXAMPLE:
+we have this data:
+10000 good (nonanomalous)
+20 flawed (anomalous)
+
+then do this:
+training set - 6000 good
+cv - 2000 good | 10 flawed
+test - 2000 good | 10 flawed
+
+Algorithm evalution (this seems so obvious i shouldnt write it down)
+1. fit model p(x) on training set {x¹x²x³...x^m}
+    - remember p(x) is the product of the gaussians (where each feature gets its own gaussian curve)
+2.    y={1 if p(x) < ε
+        {0 if p(x) ≥ ε
+
+TL;DR - check cv and tune ε. can features be weighted?
+He just says to use a real value to estimate the performance and then tweak ε based on what, for example, F1 score it gets in the cross validation set. Then, just as a reminder, if you look above you will see how to calculate μ and σ for each feature to get that features distribution curve. So I guess the data is pretty much static and all we can really tune is ε. ...this is my own thinking here --- couldnt you give each feature its own weight? so that features that are more likely to be indicative of an anomaly are represented better?
+
+*reminder - youre probably going to have a very skewed data set and so just predicting y=0 will have a very high accuracey. instead use (true pos, fals pos, fals neg, true neg), (precision/recall), (F₁-score)
+
+-------------------------------------------------------------------
+
+ANOMALY DETECTION - TRANSFORMING FEATURES
+
+look at the feature's distribution curve as a histogram:
+GOOD         NOT GREAT BUT WILL PROBABLY STILL WORK
+  |            | 
+ |||          |||
+|||||         |||||
+
+
+IF ITS NOT GREAT YOU CAN TRY TRANSOFRMING THE DATA:
+
+if  |    then replace x with log(x) and you may get a 
+   |||   much more gaussian looking (bell curve-ish)
+   ||||| distribution
+
+- you can also try log(x+1), log(x+constant), log(x^(1/3))
+    - this is done on a per feature basis. e.g. x₁, x₂, x₃, etc.
+    - just try a bunch of stuff.
+    - see pictures/anomaloy distribution/transform.png to see transform in action
+once you get it distributed so that it looks more or less gaussian then you can feed it to your learning algorithm p(xⱼ;μⱼ,σ²ⱼ).
+
+------------------------------------------------------------------
+
+ERROR ANALYSIS FOR ANOMALY DETECTION
+
+1. say you start with only feature x₁. you find an anomalous example but it's in a normal part of the distribution curve.
+
+distribution curve for x₁:
+
+          |
+         |||
+        |||||
+       |||||||
+      |||||||||
+            ^
+            |
+            ---- anomalous example is here. wtf?
+
+
+2. look at that anomalous example and see if you can come up with another feature that explains why it went bad (e.g. x₁ didn't explain why this aircraft engine went bad. maybe x₂ will).
+
+3. the hope is that adding x₂ will allow improve your classification of anomalous examples.
+
+○ good
+✖ bad
+*now how anomalous it is, is its distance from the mean of the two features. e.g. you could plot each "standard deviation" as a circle.
+
+   |           ✖
+   |
+   |    
+   |         ○
+ x₂|       ○          ○
+   |    ○        ○
+   |    ○            ○      
+   |       ○  
+   ----------------------
+            x₁      
+
+----------------------------------------------------------------
+ADVICE FOR CHOOSING FEATURES
+
+- choose features that might take on unusually large or unusually small values in the event of an anomaly.
+
+Detecting anomalies in a data center. Let's think about this:
+
+x₁ = memory use of a computer
+x₂ = number of disk accesses
+x₃ = cpu load
+x₄ = network traffic
+
+What would be a good feature for anomaly detection? Well if a server has a high cpu load and low network traffic that could very well mean it's caught in some kind of infinite loop. so a good feature would be
+
+x₅ = cpu load/network traffic
+    *you could even think this through some more and 
+     maybe it makes more sense to do:
+     x₅ = (cpu load)²/(network traffic)
+
+
+if x₅ is anomalous then we may have detected a problem with that server.
+
+**another example is heat and vibration in an engine. they are unrelated and either can be anomalous independently. so you could do x3=vibration/heat.
+---------------------------------------------------------------- 
+WHEN TO USE ORIGINAL MODEL VS MULTIVARIATE GAUSSIAN
+
+- usually the original model (2d bell curve, normal model, [singlevariate-gaussian] distribution) is used
+
+PROS OF MULTIVARIATE
+- you don't have to do this x₅ = cpu load/network traffic
+    - multivariate captures correlations automatically
+
+CONS OF MULTIVARIATE
+- m must be greater than n otherwise it won't work out mathematically
+
+PROS OF ORIGINAL
+- it's faster
+
+---------------------------------------------------------------- 
+*note on multivariate vs normal gaussian distributions
+
+something about mathematically they work out to be equal.
+that is, normal distributions can be expressed as a special
+case of multivariate distributions.
+
+see wk9 end of video 8 for more. but i think the point is just that
+you shouldn't worry about losing data when you go to/from normal and multivariate.
+----------------------------------------------------------------
+RECOMMENDER SYSTEMS
+
+- often the most important machine learning applications. or at least often the ones businesses would most like to have improved.
+             
+             |  θ¹   θ²   θ³   θ⁴|x₁   x₂
+             |                   |
+             |                   |r    a
+             |  a         c      |o    c
+             |  l         a    d |m    t
+             |  i    b    r    a |n    i 
+             |  c    o    o    v |c    o
+             |  e    b    l    e |e    n
+-------------|-------------------|------
+romnceMovie1 |  5    5    0    0 |.9   0
+romnceMovie2 |  5    ?    ?    0 |1    .01
+romnceMovie3 |  ?    4    0    ? |.99  0
+actionMovie1 |  0    0    5    4 |.1   1
+actionMovie2 |  0    0    5    ? |0    .9
+
+The goal is, given the user's ratings figure out the question marks.
+
+nᵤ=number of users
+nₘ=number of movies
+r(i,j)=1 if user j has rated movie i (0 otherwise)
+y(i,j)=rating by user j on movie i (if defined)
+θʲ=parameter vector for user j
+xⁱ=feature vector for movie i
+for user j, movie i, predicted rating is θʲ'*xⁱ
+-----------------------------------------------------------------
+HOW TO DO IT
+
+Make it a linear regression problem.
+   
+                                    n
+min    (1/2) ∑ (θʲ'*xⁱ - yⁱʲ)² + (λ/2) ∑ (θʲₖ)²
+θʲ                i:r(i,j)=1               k=1
+
+see pictures/recommender-systems/optimization-function-and-gradient-descent.jpg for a better picture
+
+-----------------------------------------------------------------
+COLLABORATIVE FILTERING
+
+Problem: With the above dataset we have to create our own features but what if we don't know the features or they're too hard (expensive, time consuming, etc) to get:
+
+             |  θ¹   θ²   θ³   θ⁴|x₁   x₂
+             |                   |
+             |                   |r    a
+             |  a         c      |o    c
+             |  l         a    d |m    t
+             |  i    b    r    a |n    i 
+             |  c    o    o    v |c    o
+             |  e    b    l    e |e    n
+-------------|-------------------|------
+romnceMovie1 |  5    5    0    0 |?    ?
+romnceMovie2 |  5    ?    ?    0 |?    ?
+romnceMovie3 |  ?    4    0    ? |?    ?
+actionMovie1 |  0    0    5    4 |?    ?
+actionMovie2 |  0    0    5    ? |?    ?
+
+Solution: We ask out users to rate what they like.
+
+θ¹=0   θ²=0   θ³=0   θ⁴=0 bias   *corresponds to x₀=1
+   5      5      0      0 romance
+   0      0      5      5 action
+
+Say alice and bob rate romnceMovie1 as 5. Also say carol and dave rate romnceMovie1 as 0. Based on what they told us we can guess that romnceMovie1 has high romance and low action.
+
+And how we get the feature vector for romnceMovie1 is to ask what value for the vector x satisfies this set of equations:
+
+(θ¹'*x)≈5
+(θ²'*x)≈5
+(θ³'*x)≈0
+(θ⁴'*x)≈0
+--------------------------------------------------------------
+COLLABORATIVE FILTERING - CHOOSING THETA AND X
+
+- you could guess theta, then calculate x. then improve theta. then improve x. etc. until you converge to an answer.
+   - but you can actually do the whole thing as one optimization problem. see pictures/recommendersystems/optimization-objective.jpg
+      - when you use this opimization objective you no longer need x₀=1. so x is now X∈ℝⁿ and θ∈ℝⁿ
+         - wk9 video 12 5:30. we can drop this x₀=1 term because now the alrogithm has all the features so if it really needs a feature to be equal to 1 it will just set one of them equal to one. I guess this is because (think stricly 2d for a second) you have both x and theta as variables. Since they are both variable they can be rearranged, by the algorithm, to fit whatever linear data they have to. Remember, the features are made up by the algorithm.
+
+*note - it can be hard to understand what the features that the algorithm has picked mean.
+---------------------------------------------------------------
+COLLABORATIVE FILTERING STEPS
+
+1.initialize x and θ to small random values.
+2.minimize J(x¹,x²,xⁿ,θ¹,θ²,θⁿ) with gradient descent (or an advanced optimization algorithm)
+3. for a user with parameters θ and a movie with (learned) features x, the predicted rating is θ'x
+-----------------------------------------------------------------
+COLLABORATIVE FILTERING - FINDING SIMILIAR MOVIES
+
+Once you have found x for all the movies. The most similiar movies are the ones where
+
+||movieOneFeatureVecor - movieTwoFeatureVector|| is the smallest. e.g. the movies with the closest distance.
+-----------------------------------------------------------------
+COLLABORATIVE FILTERING - MEAN NORMALIZATION
+
+This is for users who haven't rated anything.
+
+- When running the optimization objective if a user hasn't rated anything all they will contribute to J is the regularization term. Remember the regularization parameter wants theta to be small. So what you'll get out is θ being all zeros for that user.
+
+- If θ is all zeros we will predict 0 for every movie. But what if some movies get consistently higher/lower ratings?
+
+*you can also do this in the other direction and mean normalize the movie ratings. but in our example it makes more sense to do i
+
+
+
+
+    5 5 0 0 ?            2.5                2.5    2.5   -2.5  -2.5   ?
+    5 ? ? 0 ?            2.5                2.5    ?     ?     -2.5   ?
+Y = ? 4 0 ? ?        μ = 2         (Y-μ)--> ?      2     -2    ?      ?
+    0 0 5 4 ?            2.25              -2.25  -2.25  2.75  1.75   ?
+    0 0 5 0 ?            1.25              -1.25  -1.25  3.75  -1.25  ?
+
+
+You start with the Y on the left. The column on the right is our user who hasn't rated anything.
+
+For each row in Y take the average. Those averages are what μ is.
+
+Now when you make your prediction use Y-μ. That way default rating is the average rating. In other words, the adjusted mean rating for each movie becomes 0. 
+
+Finally, when you display your prediction to the user you have to add μ back in. 
+
+------------------------------------------------------------------
+LARGE SCALE MACHINE LEARNING - ml that deals with large datasets
+
+Friendly reminder - "It's not who has the best algorithm that wins. It's who has the most data."
+
+- 100,000,000 is not unrealistic in many modern data sets.
+- step 1. can i just use a subset of 1000 examples? pls refer to learning curves.
+
+GRADIENT DESCENT
+- if you calculate a single step of gradient descent where m=100,000,000 it might take a while.
+    - calculating gradient descent on every example per step is called "Batch gradient descent"
+
+STOCHASTIC GRADIENT DESCENT
+1. randomly shuffle the dataset
+2. Repeat: for i=1:m do θⱼ=θⱼ-α(h(xⁱ)-yⁱ)xⁱⱼ
+e.g. go through each example one by one and adjust theta.
+
+- will generally move toward the global minimum. it might take a more jagged path than batch gradient descent.
+- doesn't converge like batch gradient descent. instead it just kind of wanders around some region that is close to the global minimum. -- not really a problem in practice.
+
+MINI-BATCH GRADIENT DESCENT
+- sometimes is even faster than stochastic gradient descent (because you can do 10 at a time so you can use a vectorized implementation)
+
+- batch uses the whole training set in each iteration
+- stochastic uses 1 example in each iteration
+- mini-batch uses b examples in each iteration
+
+-a typical mini-batch size is 10. a typical range for b would be 2-100
+- it's just stochastic gradient descent in batches. make sure to use b for m in your cost and gradient calculations.
+
+- disadvantage of mini-batch is now you have to find a value for b. Ng usually starts with 10.
+
+-------------------------------------------------------------
+STOCHASTIC GRADIENT DESCENT CONVERGENCE
+
+1. compute J before updating theta
+2. plot the average cost of the last thousand examples.
+
+* could be a number other than a thousand. say, 5000.
+
+- using a smaller learning rate will be slower but may lead to slightly lower value for J. because remember it bounces around near the minimum. smaller learning rate will get it to bounce around closer.
+
+- you can make alpha smaller as the number of iterations increases. that way it learns faster but still gets a smaller value for J:
+
+α=(const1)/(iterationNUmber + const2)
+
+- a lot of the time people wont use a variable α, though, because you end up having to take time to figure out good values for const1 and const2. instead, theyll just use a constant value for α.
+
+---------------------------------------------------------------
+ONLINE LEARNING - a continuous stream of data coming in
+
+instead of having a training set you just update theta as the data comes in. it's like stochastic gradient descent except your next example comes in whenever you get it instead of from just reading the next example in the training set.
+
+examples:
+
+1. pretty much anything. say a movie website. you can update theta after each user rates a movie.
+
+2. product recommendations. we offered 10 links in response to their search query. then we can update theta based on which links they clicked. ...our goal, or the algorithms goal anyways, would be to get them to click on the links we offer. i guess the algorithm would be very happy if they clicked on all 10 links.
+--------------------------------------------------------------
+MAP-REDUCE AND DATA PARALLELISM
+
+if you have a lot of data and want to be able to train it on multiple computers. that way you arent limited to one computer, which may take longer.
+
+very clever. you have 400 training examples and 4 computers.
+
+θⱼ=θⱼ-(α/m)∑(h(xⁱ)-yⁱ)xⁱⱼ
+
+so what you do is take this part ∑(h(xⁱ)-yⁱ)xⁱⱼ and send 100 training examples to computer 1, 100 training examples to computer 2, 100 training examples to computer 3, and 100 training examples to computer 4. then send those sums back to your master computer and finish up θⱼ-(α/m)(∑1 + ∑2 + ∑3 + ∑4) 
+
+- you can use map-reduce in other situations. the question is, can your algorithm be expressed as the sum over your training set? if so, find where that summation is, parallelize it, send it back to the master computer to do the part that can't be parallelized.
+
+- obviously you can use a gpu or multiple cores on a cpu too. 
+    - some linear algebra libraries do the parallelization for you
+
+-----------------------------------------------------------------
+PHOTO OCR
+
+pipeline:
+
+1. find areas where there are text in the image
+2. character segmentation. e.g. crop each character
+3. character classification on each character
+* you could break these up into different problems. for example ill work step1, engineerA will work step2, and engineerB will work step3.
+
+----------------------------------------------------------------
+PEDESTRAIN DETECTION
+
+- in photos people are generally about the same size. whereas text might be big or small.
+- we will standardize by going with 82x36 px image patches. which is a rectangle a human standing up would fit in. 
+- get a bunch of examples of humans standing (y=1) and a bunch of examples of misc stuff, say random crops where we know there are no people (y=0). *a bunch might be 1000-10,000.
+
+SLIDING WINDOW:
+- once trained, run your 82x36px filter through an image looking for pedestrains.
+
+here is cool part:
+
+- you did your first pass with a 82x36px filter. now do more passes but make the filter bigger, say 164x72. then scale your 164x72 filter down to a 82x36 filter so you can run your pedestrain detector on it. then try with an even larger scale! no advice on how many scale sizes to try.
+
+------------------------------------------------------------------
+
+note - slider=window=filter
+*he uses the terms slider and window. but idk if he's dumbing it down.
+im pretty sure they are the same thing as a filter.
+
+------------------------------------------------------------------
+
+CHARACTER SEGMENTATION
+
+same thing - get a bunch of y=1 examples where what you see is the ab (e.g. the space between the two characters) and a bunch of y=0 examples where you only see a character or whitespace.
+
+- at this stage in the pipeline you have a rectangle. now you want to train a new filter to pick out where characters are seperated. so you just slide the filter across the rectangle.
+
+------------------------------------------------------------------
+ARTIFICIAL DATA SYNTHESIS
+
+1. create new examples from scratch
+2. amplify existing examples
+
+1. You have a lot of fonts installed on your computer. Take characters from those fonts and paste them onto random background photos. Bam, artifical data synthesis. See pictures/synthetic-character-examples.jpg for example of what that might look like.
+- it takes work to get the synthetic data to look realistic. if you do sloppy work creating the synethetic data it might not work as good.
+
+2. Take an existing example and warp it in different ways. see pictures/distortions.jpg
+- you can distort audio as well (background noise, crowd, machinery) 
+*distortions should be represenative of things you might see in the test set. for example, you probably won't benefit from adding random noise to the example.
+
+--------
+Questions to ask and steps to take before doing artificial data synthesis:
+
+Make sure you have a low bias (high variance) classifier before worrying about creating synthetic data.
+
+"How much work would it be to get 10x more data than we currently have"? Often it's not that hard.
+
+Can I use crowd sourcing? Hire people online for cheap. Get them to label your data set. Amazon Mechanical Turk is one crowd sourcing option.
+
+------------------------------------------------------------------
+WHAT PART OF THE PIPELINE TO WORK ON NEXT - your time is valuable - this is important. people have wasted years on tasks only to find out it only made a tiny improvement to the accuracy of the system.
+
+Cieling Analysis (cieling is the absolute max each part of the pipeline can be improved)
+
+What part of the pipeline should you spent the most time trying to improve? 
+    - Get a single real number to evaluate each part of the pipeline.
+    - A good real number might be how accurate each part is.
+    - You do this by hand feeding each part 100% correct data (instead of the output from the previous stage in the pipeline)
+
+How accurate each stage would be if it, and all previous stages, were feed 100% accurate data:
+
+Initial Accuracy: 72%
+
+Text detection: 89%
+Character segmentation: 90% 
+Character recognition: 100%
+
+Initial Accuracy -> Text detection (fed correct labels) -> +17% accuracy
+
+Text detection -> Character segmentation (fed correct labels) -> +1% accuracy
+
+Character segmentation -> Character recognition (fed correct labels) -> +10% accuracy
+
+What this tells you is even if you give it the perfect representation how much will it improve. Is it worth your time to give part 2 of the pipeline a better representation when even if you do you can, at most, make it 1% more accurate?
+
+--------------------------------------------------------------------
+
